@@ -5,17 +5,22 @@ import actionlib
 from control_msgs.msg import *
 from trajectory_msgs.msg import *
 
-JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
-               'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
-Q1 = [2.2,0,-1.5,0,0,0]
-Q2 = [1.5,0,-1,0,0,0]
-Q3 = [1.5,-0.2,-1.57,0,0,0]
+# Define 6 joint names here, you could find it in rostopic 
+JOINT_NAMES = [xxx, xxx, xxx, xxx, xxx, xxx]
+
+# Goal joint example , wrist should be zero
+Q1 = [x,x,x,x,x,x]
+Q2 = [x,x,x,x,x,x]
+Q3 = [x,x,x,x,x,x]
+
 client = None
 
 def move():
-    g = FollowJointTrajectoryGoal()
-    g.trajectory = JointTrajectory()
-    g.trajectory.joint_names = JOINT_NAMES
+    # Define the joint name in JointTrajectory message type
+    # FollowJointTrajectoryGoal -> JointTrajectory -> joint_names
+    g = XXX
+    g.trajectory = XXX
+    g.trajectory.joint_names = XXX
     g.trajectory.points = [
         JointTrajectoryPoint(positions=Q1, velocities=[0]*6, time_from_start=rospy.Duration(2.0)),
         JointTrajectoryPoint(positions=Q2, velocities=[0]*6, time_from_start=rospy.Duration(3.0)),
@@ -26,26 +31,13 @@ def move():
     except KeyboardInterrupt:
         client.cancel_goal()
         raise
-
-def move_disordered():
-    order = [4, 2, 3, 1, 5, 0]
-    g = FollowJointTrajectoryGoal()
-    g.trajectory = JointTrajectory()
-    g.trajectory.joint_names = [JOINT_NAMES[i] for i in order]
-    q1 = [Q1[i] for i in order]
-    q2 = [Q2[i] for i in order]
-    q3 = [Q3[i] for i in order]
-    g.trajectory.points = [
-        JointTrajectoryPoint(positions=q1, velocities=[0]*6, time_from_start=rospy.Duration(2.0)),
-        JointTrajectoryPoint(positions=q2, velocities=[0]*6, time_from_start=rospy.Duration(3.0)),
-        JointTrajectoryPoint(positions=q3, velocities=[0]*6, time_from_start=rospy.Duration(4.0))]
-    client.send_goal(g)
-    client.wait_for_result()
     
 def move_repeated():
-    g = FollowJointTrajectoryGoal()
-    g.trajectory = JointTrajectory()
-    g.trajectory.joint_names = JOINT_NAMES
+    # Define the joint name in JointTrajectory message type
+    # FollowJointTrajectoryGoal -> JointTrajectory -> joint_names
+    g = XXX
+    g.trajectory = XXX
+    g.trajectory.joint_names = XXX
     
     d = 2.0
     g.trajectory.points = []
@@ -66,25 +58,6 @@ def move_repeated():
         client.cancel_goal()
         raise
 
-def move_interrupt():
-    g = FollowJointTrajectoryGoal()
-    g.trajectory = JointTrajectory()
-    g.trajectory.joint_names = JOINT_NAMES
-    g.trajectory.points = [
-        JointTrajectoryPoint(positions=Q1, velocities=[0]*6, time_from_start=rospy.Duration(2.0)),
-        JointTrajectoryPoint(positions=Q2, velocities=[0]*6, time_from_start=rospy.Duration(3.0)),
-        JointTrajectoryPoint(positions=Q3, velocities=[0]*6, time_from_start=rospy.Duration(4.0))]
-    
-    client.send_goal(g)
-    time.sleep(2.0)
-    print "Interrupting"
-    client.send_goal(g)
-    try:
-        client.wait_for_result()
-    except KeyboardInterrupt:
-        client.cancel_goal()
-        raise
-
 def main():
     global client
     try:
@@ -93,9 +66,7 @@ def main():
         print "Waiting for ur5_arm server..."
         client.wait_for_server()
         print "Connected to ur5_arm server"
-        #move()
-        move_disordered()
-        #move_interrupt()
+        move()
         #move_repeated()
     except KeyboardInterrupt:
         rospy.signal_shutdown("KeyboardInterrupt")
