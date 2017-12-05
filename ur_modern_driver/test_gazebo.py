@@ -6,21 +6,21 @@ from control_msgs.msg import *
 from trajectory_msgs.msg import *
 
 # Define 6 joint names here, you could find it in rostopic 
-JOINT_NAMES = [xxx, xxx, xxx, xxx, xxx, xxx]
+JOINT_NAMES = ['elbow_joint', 'shoulder_lift_joint', 'shoulder_pan_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
 
 # Goal joint example , wrist should be zero
-Q1 = [x,x,x,x,x,x]
-Q2 = [x,x,x,x,x,x]
-Q3 = [x,x,x,x,x,x]
+Q1 = [-1.5,1.5,0,0,0,0]
+Q2 = [0,1.5,0,0,0,0]
+Q3 = [1.5,1.5,0,0,0,0]
 
 client = None
 
 def move():
     # Define the joint name in JointTrajectory message type
     # FollowJointTrajectoryGoal -> JointTrajectory -> joint_names
-    g = XXX
-    g.trajectory = XXX
-    g.trajectory.joint_names = XXX
+    g = FollowJointTrajectoryGoal()
+    g.trajectory = JointTrajectory()
+    g.trajectory.joint_names = JOINT_NAMES
     g.trajectory.points = [
         JointTrajectoryPoint(positions=Q1, velocities=[0]*6, time_from_start=rospy.Duration(2.0)),
         JointTrajectoryPoint(positions=Q2, velocities=[0]*6, time_from_start=rospy.Duration(3.0)),
@@ -35,9 +35,9 @@ def move():
 def move_repeated():
     # Define the joint name in JointTrajectory message type
     # FollowJointTrajectoryGoal -> JointTrajectory -> joint_names
-    g = XXX
-    g.trajectory = XXX
-    g.trajectory.joint_names = XXX
+    g = FollowJointTrajectoryGoal()
+    g.trajectory = JointTrajectory()
+    g.trajectory.joint_names = JOINT_NAMES
     
     d = 2.0
     g.trajectory.points = []
